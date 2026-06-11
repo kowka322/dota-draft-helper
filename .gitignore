@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+raw_matches.json
+heroes.json
+.pytest_cache/
+.vscode/
+.coverage
+*.code-workspace
+notes.ipynb
