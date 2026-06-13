@@ -49,7 +49,7 @@ X_test, y_test = build_dataset(test_matches)
 model = LogisticRegression(max_iter=1000)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
-print("accuracy:", accuracy_score(y_test, y_pred))
+print("accuracy:", accuracy_score(y_test, y_pred))   #0.54
 print(classification_report(y_test, y_pred))
 
 
@@ -58,7 +58,7 @@ print(classification_report(y_test, y_pred))
 model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
-print("accuracy:", accuracy_score(y_test, y_pred))
+print("accuracy:", accuracy_score(y_test, y_pred))  #0/525
 print(classification_report(y_test, y_pred))
 
 
