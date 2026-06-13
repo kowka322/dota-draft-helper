@@ -9,3 +9,5 @@ heroes.json
 .coverage
 *.code-workspace
 notes.ipynb
+hero_to_index.joblib
+model.joblib
