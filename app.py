@@ -1,5 +1,6 @@
 import joblib
 import json
+import streamlit as st
 
 model = joblib.load("model.joblib")
 hero_to_index = joblib.load("hero_to_index.joblib")
@@ -51,8 +52,26 @@ def recommendator(allies, enemies, side, position=None):
 
 with open("heroes.json", "r", encoding="utf-8") as f:
     heroes = json.load(f)
-hero_names = {hero["id"]: hero["localized_name"] for hero in heroes}
 
-result = recommendator([85, 128, 35, 29], [25, 90, 94, 69, 86], "dire", position="1")
-for hero_id, prob in result:
-    print(f"{hero_names[hero_id]}: {round(float(prob)*100, 1)}%")
+hero_names = {hero["id"]: hero["localized_name"] for hero in heroes}
+name_to_id = {hero["localized_name"]: hero["id"] for hero in heroes}
+
+
+st.title("Dota 2 Draft Helper")
+all_hero_names = sorted(name_to_id.keys())
+allies = st.multiselect("Your team", all_hero_names)
+enemies = st.multiselect("Enemy team", all_hero_names)
+side = st.radio("Your side", ["radiant", "dire"])
+position = st.selectbox("Position to fill", ["Any", "1", "2", "3", "4-5"])
+
+if st.button("Recommend"):
+    ally_ids = [name_to_id[name] for name in allies]
+    enemy_ids = [name_to_id[name] for name in enemies]
+
+    pos = None if position == "Any" else position
+
+    result = recommendator(ally_ids, enemy_ids, side, position=pos)
+
+    st.subheader("Recommended picks:")
+    for hero_id, prob in result:
+        st.write(f"{hero_names[hero_id]}: {round(float(prob) * 100, 1)}%")
