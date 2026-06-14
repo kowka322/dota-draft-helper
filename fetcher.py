@@ -39,7 +39,7 @@ def save_to_json(matches, filename):
         
         
         
-def fetch_all_pages(target_count: int = 5000) -> Iterator[dict]:
+def fetch_all_pages(target_count: int = 10000) -> Iterator[dict]:
     seen_id = set()
     less_than_match_id = None
     count = 0
@@ -94,5 +94,5 @@ class  JsonSaver:
 
 if __name__ == "__main__":
     with JsonSaver("raw_matches.json") as saver:
-        for match in fetch_all_pages(5000):
+        for match in fetch_all_pages(10000):
             saver.add(match)
