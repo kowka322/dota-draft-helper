@@ -31,7 +31,7 @@ hero_positions = {
 }
 
 
-def recommendator(allies, enemies, side, position=None):
+def recommender(allies, enemies, side, position=None):
     taken = set(allies) | set(enemies)
     candidates = [hero_id for hero_id in hero_to_index if hero_id not in taken]
     
@@ -70,7 +70,7 @@ if st.button("Recommend"):
 
     pos = None if position == "Any" else position
 
-    result = recommendator(ally_ids, enemy_ids, side, position=pos)
+    result = recommender(ally_ids, enemy_ids, side, position=pos)
 
     st.subheader("Recommended picks:")
     for hero_id, prob in result:

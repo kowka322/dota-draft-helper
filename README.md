@@ -47,7 +47,7 @@ cd dota-draft-helper
 
 
 python -m venv .venv
-source .venv/Scripts/activate        
+.venv\Scripts\Activate.ps1   
 
 pip install -r requirements.txt
 streamlit run app.py
@@ -76,7 +76,7 @@ The project is a full pipeline from raw data to a deployed app.
 **1. Data collection (`fetcher.py`)**
 The OpenDota API proved to be the least reliable part of the pipeline. Long collection runs would regularly encounter HTTP 429 rate limits, occasional timeouts, and interrupted requests. Restarting a collection from scratch after several hundred matches would waste both time and API quota.
 
-To make the scraper fault-tolerant, I implemented a custom JsonSaver context manager that checkpoints progress every 50 successfully collected matches. If the process crashes, gets rate-limited, or is manually stopped, collection can resume from the latest checkpoint instead of restarting from zero.
+To make the scraper fault-tolerant, I implemented a custom JsonSaver context manager that checkpoints progress every 50 successfully collected matches. If the process crashes, gets rate-limited, or is manually stopped, all matches collected up to the last checkpoint are saved instead of lost.
 
 Rate limiting (HTTP 429) is handled separately through a `@retry_on_429` decorator from `decorators.py`, with automatic retries (3 times) and backoff.
 

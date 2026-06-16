@@ -28,12 +28,6 @@ def partial_match_to_vector(match, hero_to_index, n_per_side):
     return vector
 
 
-with open("raw_matches.json","r", encoding="utf-8") as f:
-    matches = json.load(f)
-
-
-train_matches, test_matches = train_test_split(matches, test_size=0.2, random_state=42)
-
 def build_dataset(match_list):
     X, y = [], []
     for m in match_list:
@@ -42,26 +36,27 @@ def build_dataset(match_list):
             y.append(m["radiant_win"])
     return X, y
 
-X_train, y_train = build_dataset(train_matches)
-X_test, y_test = build_dataset(test_matches)
 
+if __name__ == "__main__":
+    with open("raw_matches.json","r", encoding="utf-8") as f:
+        matches = json.load(f)
 
-model = LogisticRegression(max_iter=1000)
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
-print("accuracy:", accuracy_score(y_test, y_pred))   #0.54
-print(classification_report(y_test, y_pred))
+    train_matches, test_matches = train_test_split(matches, test_size=0.2, random_state=42)
 
+    X_train, y_train = build_dataset(train_matches)
+    X_test, y_test = build_dataset(test_matches)
 
+    model = LogisticRegression(max_iter=1000)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    print("accuracy:", accuracy_score(y_test, y_pred))   #0.54
+    print(classification_report(y_test, y_pred))
 
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    print("accuracy:", accuracy_score(y_test, y_pred))  #0.525
+    print(classification_report(y_test, y_pred))
 
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
-print("accuracy:", accuracy_score(y_test, y_pred))  #0/525
-print(classification_report(y_test, y_pred))
-
-
-
-joblib.dump(model, "model.joblib")
-joblib.dump(hero_to_index, "hero_to_index.joblib")
+    joblib.dump(model, "model.joblib")
+    joblib.dump(hero_to_index, "hero_to_index.joblib")
